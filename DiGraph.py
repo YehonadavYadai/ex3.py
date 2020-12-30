@@ -5,9 +5,13 @@ from GraphAttributes import *
 class DiGraph(GraphInterface):
 
     def __init__(self):
-        self.v_size = 0
-        self.e_size = 0
+        # the amount of nodes currently in this graph
+        self.number_of_v = 0
+        # the amount of edges currently in this graph
+        self.number_of_e = 0
+        # key - node ID, value - Node object with the ID of key
         self.all_nodes = dict()
+        # number of changes in that occurred in the graph
         self.mc = 0
 
     def v_size(self) -> int:
@@ -15,14 +19,14 @@ class DiGraph(GraphInterface):
         Returns the number of vertices in this graph
         @return: The number of vertices in this graph
         """
-        return self.v_size
+        return self.number_of_v
 
     def e_size(self) -> int:
         """
         Returns the number of edges in this graph
         @return: The number of edges in this graph
         """
-        return self.e_size
+        return self.number_of_e
 
     def get_all_v(self) -> dict:
         """return a dictionary of all the nodes in the Graph, each node is represented using a pair  (key, node_data)
@@ -34,7 +38,8 @@ class DiGraph(GraphInterface):
         each node is represented using a pair (key, weight)
          """
         if id1 in self.all_nodes:
-            return self.all_nodes[id1].edges_from
+            node = self.all_nodes[id1]
+            return node.edges_from
 
     def all_out_edges_of_node(self, id1: int) -> dict:
         """return a dictionary of all the nodes connected from node_id , each node is represented using a pair (key,
@@ -61,18 +66,24 @@ class DiGraph(GraphInterface):
         Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
         """
         flag = False
+        # if the user tries to connect a node to itself
+        if id1 == id2:
+            return True  # vacuously true
+        # if both of the id's are in this graph
         if id1 in self.all_nodes and id2 in self.all_nodes:
             node_src = self.all_nodes[id1]
-            if id2 not in node_src.edges_to:
-                new_edge = Edge(id1, id2, weight)
-                node_src[id2] = new_edge
+            node_dest = self.all_nodes[id2]
+            # if there isn't an existing edge between id1 to id2
+            if id2 not in node_src.edges_towards:
+                node_src.add_edges_towards(id2, weight)
+                node_dest.add_edge_from(id1, weight)
                 self.mc += 1
-                self.e_size += 1
+                self.number_of_e += 1
                 flag = True
         return flag
 
     def add_node(self, node_id: int, pos: tuple = None) -> bool:
-        """
+        """"
         Adds a node to the graph.
         @param node_id: The node ID
         @param pos: The position of the node
@@ -80,10 +91,13 @@ class DiGraph(GraphInterface):
         Note: if the node id already exists the node will not be added
         """
         flag = False
+        # if there isn't existing node with the same id - add to this graph
         if node_id not in self.all_nodes:
-            self.all_nodes[node_id] = pos
+            new_node = Node(node_id, pos)
+            self.all_nodes[node_id] = new_node
             self.mc += 1
-            self.v_size += 1
+            self.number_of_v += 1
+            flag = True
         return flag
 
     def remove_node(self, node_id: int) -> bool:
@@ -97,7 +111,7 @@ class DiGraph(GraphInterface):
         if node_id in self.all_nodes:
             self.all_nodes.pop(node_id)
             self.mc += 1
-            self.v_size -= 1
+            self.number_of_v -= 1
             flag = True
         return flag
 
@@ -115,6 +129,6 @@ class DiGraph(GraphInterface):
             if node_id2 in node_src.edges_to:
                 node_src.edges_to.pop(node_id2)
                 self.mc += 1
-                self.e_size -= 1
+                self.number_of_e -= 1
                 flag = True
         return flag
