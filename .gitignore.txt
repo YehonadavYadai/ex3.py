@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .idea/
 ._pycache_/
 out/
@@ -5,3 +6,8 @@ out/
 tr.py
 
 
+=======
+idea./
+venv/
+test
+>>>>>>> 9a7cd95f958a8ef4b51cbdc1ae414cfa52b7c6f7
