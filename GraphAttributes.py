@@ -1,16 +1,16 @@
 class Node:
 
     def __init__(self, node_id: int = 0, pos: tuple = None):
-        """"" This node ID """
         self.node_id = node_id
-        """"" Dictionary that holds edges from this node: key - the destination node of the edge, value - the edge 
-        weight """
+        """"" This node ID """
         self.edges_from = dict()
-        """"" Dictionary that holds edges that going to this node: key - the source node of the edge, value - the edge 
-        weight """
+        """"" Dictionary that holds edges from this node: key - the destination node of the edge, value - the edge 
+                weight """
         self.edges_towards = dict()
-        """"" Tuple that holds this node location"""
+        """"" Dictionary that holds edges that going to this node: key - the source node of the edge, value - the edge 
+                weight """
         self.pos = pos
+        """"" Tuple that holds this node location"""
 
     def add_edge_from(self, node_id: int, weight: float):
         if node_id not in self.edges_from:

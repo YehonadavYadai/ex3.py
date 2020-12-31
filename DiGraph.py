@@ -109,7 +109,16 @@ class DiGraph(GraphInterface):
         """
         flag = False
         if node_id in self.all_nodes:
-            self.all_nodes.pop(node_id)
+            node_to_remove = self.all_nodes.pop(node_id)
+            # remove all the edges that this node is the destination from the source node's list
+            for key in node_to_remove.edges_from:
+                current_node = self.all_nodes[key]
+                current_node.edges_towards.pop(node_id)
+            # remove all the edges that this node is the source from the destination node's list
+            for key in node_to_remove.edges_towards:
+                current_node = self.all_nodes[key]
+                current_node.edges_from.pop(node_id)
+            del node_to_remove
             self.mc += 1
             self.number_of_v -= 1
             flag = True
