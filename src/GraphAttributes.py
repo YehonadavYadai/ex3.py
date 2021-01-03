@@ -21,7 +21,7 @@ class Node:
             self.edges_towards[node_id] = weight
 
     def __repr__(self):
-        x=(f"{self.node_id}: |edges out| {self.__sizeof__(self.edges_towards)} , |edges in| {self.__sizeof__(self.edges_from)} ")
+        x=(f"{self.node_id}: |edges out| {len(self.edges_towards)} , |edges in| {len(self.edges_from)} ")
         return x
 
 class Edge:
