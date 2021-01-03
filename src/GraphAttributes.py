@@ -24,6 +24,10 @@ class Node:
         x=(f"{self.node_id}: |edges out| {len(self.edges_towards)} , |edges in| {len(self.edges_from)} ")
         return x
 
+    def setPosition (self,x:int=0,y:int=0):
+        self.pos=(x,y)
+
+
 class Edge:
     def __init__(self, src: int, dest: int, weight: float):
         self.src = src

@@ -3,71 +3,64 @@ from GraphAttributes import *
 from DiGraph import DiGraph
 from src import GraphInterface
 import json
+from GraphAttributes import Node
 from types import SimpleNamespace
-
 
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self,hey=DiGraph()):
+    def __init__(self, hey=DiGraph()):
         self.g = hey
 
     def get_graph(self) -> GraphInterface:
         return self.g
+
     """
            Loads a graph from a json file.
            @param file_name: The path to the json file
            @returns True if the loading was successful, False o.w.
            """
 
-    # def makeJson (self):
-    #     str_Json= json.dump(self.g.__dict__)
-    #     return str_Json
+    def load_from_json(self, file_name: str) -> bool:
+        g = DiGraph()
+        file=open(file_name)
+        loaded_json = json.load(file)
+        node_from_json = loaded_json["Nodes"]
+        for currentNode in node_from_json:
+            id = currentNode["id"]
+            if len(currentNode) > 1:
+                self.g.add_node(id, currentNode["pos"])
+            else:
+                self.g.add_node(id)
+        edges_From_Json = loaded_json["Edges"]
+        for curretnEdge in edges_From_Json:
+            g.add_edge(curretnEdge["src"], curretnEdge["dest"], curretnEdge["w"])
+        file.close()
+        return True
 
-    # def load_from_json(self, file_name: str) -> bool:
-    #     new_graph = {}
-    #     try:
-    #         with open(file_name,"r") as json_file:
-    #              my_dict=json.load(json_file)
-    #              for  k,v in my_dict.items() :
-    #                  hey=DiGraph(**v)
-    #                 new_graph[k]=hey
-    #         return True
-    #     except IOError as e:
-    #         print(e)
-    #         return False
-    #
-    #     self.g = new_graph.__dict__
+        """
+        Saves the graph in JSON format to a file
+        @param file_name: The path to the out file
+        @return: True if the save was successful, False o.w.
+               """
 
+    def save_to_json(self, file_name: str = "save.json") -> bool:
+        json_to_save = {}
+        arrNodes = []
+        arrEdges = []
+        i = 0
+        nodes = self.g.get_all_v()  # dict with {key:Node}
+        try:
+            with open(file_name, "w")as write_file:
+                for key in nodes.keys():  #
+                    arrNodes.append({"id": key})
+                    for dest, w in self.g.all_out_edges_of_node(key).items():
+                        arrEdges.append({"src": key, "dest": dest, "w": w})
 
-        #
-        # """
-        # Saves the graph in JSON format to a file
-        # @param file_name: The path to the out file
-        # @return: True if the save was successful, False o.w.
-        #        """w
+                json_to_save = {'Nodes': arrNodes, "Edges": arrEdges}
+                json.dump(json_to_save, write_file)
+                return True
 
-    # def save_to_json(self, file_name: str="save.json") -> bool:
-    #     arr=[]
-    #     i=0
-    #     nodes=self.g.get_all_v()
-    #     try:
-    #         with open("data_file.json","w")as write_file:
-    #          for key in nodes.keys():#
-    #             arr.append({key:nodes[key]})
-    #
-    #             return True
-    #
-    #     except IOError as e:
-    #         print(e)
-
-
-
-
-
-
-
-
-
-
-
+        except IOError as e:
+            return False
+            print(e)
