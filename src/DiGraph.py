@@ -4,15 +4,19 @@ from GraphAttributes import *
 
 class DiGraph(GraphInterface):
 
-    def __init__(self):
+    def __init__(self, num_v: int = 0, num_e: int = 0, dic: dict ={}, _mc: int = 0):
         # the amount of nodes currently in this graph
-        self.number_of_v = 0
+        self.number_of_v = num_v
         # the amount of edges currently in this graph
-        self.number_of_e = 0
+        self.number_of_e = num_e
         # key - node ID, value - Node object with the ID of key
-        self.all_nodes = dict()
+        self.all_nodes = dic
         # number of changes in that occurred in the graph
-        self.mc = 0
+        self.mc = _mc
+
+    def __repr__(self):
+        x=(f"Graph: |V|={self.number_of_v} , |E|={self.number_of_e}")
+        return x
 
     def v_size(self) -> int:
         """

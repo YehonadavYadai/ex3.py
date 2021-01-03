@@ -20,6 +20,9 @@ class Node:
         if node_id not in self.edges_towards:
             self.edges_towards[node_id] = weight
 
+    def __repr__(self):
+        x=(f"{self.node_id}: |edges out| {self.__sizeof__(self.edges_towards)} , |edges in| {self.__sizeof__(self.edges_from)} ")
+        return x
 
 class Edge:
     def __init__(self, src: int, dest: int, weight: float):
