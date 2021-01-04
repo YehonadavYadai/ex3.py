@@ -1,5 +1,6 @@
 class Node:
 
+
     def __init__(self, node_id: int = 0, pos: tuple = None):
         self.node_id = node_id
         """"" This node ID """
@@ -11,6 +12,8 @@ class Node:
                 weight """
         self.pos = pos
         """"" Tuple that holds this node location"""
+        self._tag = None
+        """" Uses for complex algorithms on graph"""
 
     def add_edge_from(self, node_id: int, weight: float):
         if node_id not in self.edges_from:
@@ -19,6 +22,15 @@ class Node:
     def add_edges_towards(self, node_id: int, weight: float):
         if node_id not in self.edges_towards:
             self.edges_towards[node_id] = weight
+
+    def get_id(self):
+        return self.node_id
+
+    def set_tag(self, tag: int):
+        self._tag = tag
+
+    def get_tag(self) -> int:
+        return self._tag
 
     def __repr__(self):
         x=(f"{self.node_id}: |edges out| {len(self.edges_towards)} , |edges in| {len(self.edges_from)} ")
