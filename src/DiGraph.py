@@ -70,6 +70,9 @@ class DiGraph(GraphInterface):
         @return: True if the edge was added successfully, False o.w.
         Note: If the edge already exists or one of the nodes dose not exists the functions will do nothing
         """
+        # weight can't be negative in this assignment
+        if weight < 0:
+            return False
         flag = False
         # if the user tries to connect a node to itself
         if id1 == id2:
@@ -142,7 +145,11 @@ class DiGraph(GraphInterface):
             node_src = self._all_nodes[node_id1]
             if node_id2 in node_src.edges_towards:
                 node_src.edges_towards.pop(node_id2)
+                node_dest = self._all_nodes[node_id2]
+                node_dest.edges_from.pop(node_id1)
                 self._mc += 1
                 self._number_of_e -= 1
                 flag = True
         return flag
+
+

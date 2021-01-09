@@ -1,4 +1,7 @@
+import copy
 import math
+from collections import deque
+from queue import LifoQueue
 
 from GraphAlgoInterface import GraphAlgoInterface
 from GraphAttributes import *
@@ -11,8 +14,11 @@ from types import SimpleNamespace
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self, hey=DiGraph()):
-        self.g = hey
+    def __init__(self, g: DiGraph):
+        self.g = g
+
+    def set_g(self, g: DiGraph):
+        self.g = g
 
     def get_graph(self) -> GraphInterface:
         return self.g
@@ -21,13 +27,14 @@ class GraphAlgo(GraphAlgoInterface):
         graph = self.get_graph()
         # if one of the nodes isn't in the graph
         if id1 not in graph.get_all_v() or id2 not in graph.get_all_v():
-            return -1
+            return float('inf'), []
         graph_size = graph.v_size()
         visited = [False]  # list to mark if node has been visited
         visited *= graph_size
         prev = dict()  # list that holds the id of the nodes by order of the shortest path
-        distance = [math.inf]  # list that holds the current distance between a node to given source node. At first
-        # all initiates to infinity
+        distance = list()
+        distance.append(float('inf'))  # list that holds the current distance between a node to given source node.
+        # At first, all elements initiates to infinity
         distance *= graph_size
         nodes_in_graph = dict()  # dictionary that holds the graph's nodes for comfort use - key: node's tag,
         # value: node address
@@ -45,7 +52,6 @@ class GraphAlgo(GraphAlgoInterface):
         distance[src_node.get_tag()] = 0  # distance of a node to itself is 0
         prev[src_node.get_tag] = src_node.get_tag
         pq[src_node.get_tag()] = 0
-
         while pq:
             keys = list(pq.keys())
             val = list(pq.values())
@@ -69,7 +75,8 @@ class GraphAlgo(GraphAlgoInterface):
         at = dest_node.get_tag()
         path = list()
         # if there's no path
-        if distance[at] is math.inf:
+        if distance[at] == float('inf'):
+            path = ()
             return distance[at], path
         i = 0
         while at != src_node.get_tag:
@@ -83,14 +90,93 @@ class GraphAlgo(GraphAlgoInterface):
         for tag in path:
             node_id = nodes_in_graph[tag].get_id()
             path_result.append(node_id)
-        return distance[dest_node.get_tag()], path_result
+        dest_tag = dest_node.get_tag()
+        for data in graph.get_all_v():
+            node = graph.get_all_v()[data]
+            node.set_tag(None)
+        return distance[dest_tag], path_result
+
+    def transpose(self):
+        """ Returns the transpose of self's graph."""
+        g = self.get_graph()
+        ans = copy.deepcopy(g)
+        # cleaning all edges
+        for node_id in ans.get_all_v():
+            current_node = ans.get_all_v()[node_id]
+            nodes_to_current = copy.deepcopy(current_node.edges_from)
+            nodes_from_current = copy.deepcopy(current_node.edges_towards)  # current node's edges dict  it's the source
+            for dest in nodes_from_current:
+                ans.remove_edge(node_id, dest)
+            for src in nodes_to_current:
+                ans.remove_edge(src, node_id)
+
+        for node_id in g.get_all_v():
+            node = g.get_all_v()[node_id]
+            for neighbor_id in node.edges_from:
+                edge_weight = node.edges_from[neighbor_id]
+                ans.add_edge(node_id, neighbor_id, edge_weight)
+        return ans
+
+    def connected_component(self, id1: int):
+        g = self.get_graph()
+        # if id1 not in the graph
+        if id1 not in g.get_all_v():
+            raise Exception
+        component = self.dfs(id1, g)
+        g_t = self.transpose()
+        component_t = self.dfs(id1, g_t)
+        s = set(component).intersection(component_t)
+        ans = list()
+        for value in s:
+            ans.append(value)
+        # removing info from dfs
+        for node_id in g.get_all_v():
+            node = g.get_all_v()[node_id]
+            node.info = ''
+        return ans
+
+    def connected_components(self):
+        ans = list()
+        g = self.get_graph()
+        # if id1 not in the graph
+        for node_id in g.get_all_v():
+            node = g.get_all_v()[node_id]
+            if node.info != '':
+                component = self.dfs(node_id, g)
+                g_t = self.transpose()
+                component_t = self.dfs(node_id, g_t)
+                s = set(component).intersection(component_t)
+                ans.append(s)
+        for node_id in g.get_all_v():
+            node = g.get_all_v()[node_id]
+            node.info = ''
+        return ans
+
+
+
+    def dfs(self, id1: int, g: DiGraph):
+        ans = list()
+        ans.append(id1)
+        for node_id in g.get_all_v():
+            node = g.get_all_v()[node_id]
+            node.info = 'X'
+        stack = deque()
+        stack.append(id1)
+        while stack:
+            current_node = g.get_all_v()[stack.pop()]
+            if current_node.info != 'V':
+                current_node.info = 'V'
+            for neighbor_id in current_node.edges_towards:
+                neighbor = g.get_all_v()[neighbor_id]
+                if neighbor.info != 'V':
+                    stack.append(neighbor_id)
+                    ans.append(neighbor_id)
+        return ans
 
     def load_from_json(self, file_name: str) -> bool:
-        """
-                  Loads a graph from a json file.
-                  @param file_name: The path to the json file
-                  @returns True if the loading was successful, False o.w.
-                  """
+        """ Loads a graph from a json file.
+        @param file_name: The path to the json file
+        @returns True if the loading was successful, False o.w."""
         g = DiGraph()
         file = open(file_name)
         loaded_json = json.load(file)

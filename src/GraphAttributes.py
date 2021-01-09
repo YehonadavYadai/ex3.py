@@ -13,8 +13,9 @@ class Node:
         self.pos = pos
         """"" Tuple that holds this node location"""
         self._tag = None
-        """" Uses for complex algorithms on graph"""
-
+        """" Used for complex algorithms on graph"""
+        self.info = None
+        """" Used for complex algorithms on graph"""
     def add_edge_from(self, node_id: int, weight: float):
         if node_id not in self.edges_from:
             self.edges_from[node_id] = weight
