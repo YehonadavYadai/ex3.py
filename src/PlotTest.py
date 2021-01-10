@@ -11,7 +11,7 @@ import random
 if __name__ == '__main__':
     g = DiGraph()
     for i in range(10):
-        g.add_node(i,(i,i+1))
+        g.add_node(i)
     g.add_edge(3, 4, 1)
     g.add_edge(3, 7, 1)
     g.add_edge(7, 3, 1)
@@ -26,10 +26,11 @@ if __name__ == '__main__':
     g.add_edge(1, 2, 1)
     g.add_edge(2, 0, 1)
     g.add_node(10)
-    k=GraphAlgo(g)
-    #k.plot_graph()
-    k.load_from_json("A3")
 
+    k=GraphAlgo(g)
+    k.load_from_json("A1")
     k.plot_graph()
+
+
 
 
