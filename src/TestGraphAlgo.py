@@ -144,5 +144,28 @@ class MyTestCase(unittest.TestCase):
         t.save_to_json("test.json")
 
 
+    def test_plot(self):
+        g = DiGraph()
+        for i in range(10):
+            g.add_node(i)
+        g.add_edge(3, 4, 1)
+        g.add_edge(3, 7, 1)
+        g.add_edge(7, 3, 1)
+        g.add_edge(7, 5, 1)
+        g.add_edge(5, 0, 1)
+        g.add_edge(5, 6, 1)
+        g.add_edge(4, 5, 1)
+        g.add_edge(6, 4, 1)
+        g.add_edge(6, 0, 1)
+        g.add_edge(6, 2, 1)
+        g.add_edge(0, 1, 1)
+        g.add_edge(1, 2, 1)
+        g.add_edge(2, 0, 1)
+        g.add_node(10)
+
+        k = GraphAlgo(g)
+        k.load_from_json("G_1000_8000_1.json")
+        k.plot_graph()
+
 if __name__ == '__main__':
     unittest.main()

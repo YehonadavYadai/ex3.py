@@ -295,7 +295,6 @@ class GraphAlgo(GraphAlgoInterface):
         #dest of salnt of the limit fo the graph
         l_min = [limit[0], limit[2]]#let down
         l_max = [limit[1], limit[3]]#right up
-        print(l_max,l_min)
         l=math.dist(l_min,l_max)
 
         #add arrow for each edge of the graph
@@ -311,6 +310,5 @@ class GraphAlgo(GraphAlgoInterface):
                 q = [x1, y1]
                 dis=math.dist(q,p)
                 a=dis/l
-                print(l,dis,dis/l)
                 plt.arrow(x1, y1, x2 - x1, y2 - y1, head_width=dis/30, width=a/10000,color="black",length_includes_head=True)
         plt.show()
