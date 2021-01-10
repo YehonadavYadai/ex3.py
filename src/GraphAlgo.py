@@ -2,7 +2,9 @@ import copy
 import math
 from collections import deque
 from queue import LifoQueue
-
+import numpy as np
+import matplotlib.pyplot as plt
+import random
 from GraphAlgoInterface import GraphAlgoInterface
 from GraphAttributes import *
 from DiGraph import DiGraph
@@ -152,8 +154,6 @@ class GraphAlgo(GraphAlgoInterface):
             node.info = ''
         return ans
 
-
-
     def dfs(self, id1: int, g: DiGraph):
         ans = list()
         ans.append(id1)
@@ -177,20 +177,27 @@ class GraphAlgo(GraphAlgoInterface):
         """ Loads a graph from a json file.
         @param file_name: The path to the json file
         @returns True if the loading was successful, False o.w."""
-        g = DiGraph()
+        g_loaded = DiGraph()
         file = open(file_name)
+
+        pos = []
         loaded_json = json.load(file)
         node_from_json = loaded_json["Nodes"]
         for currentNode in node_from_json:
             id = currentNode["id"]
             if len(currentNode) > 1:
-                self.g.add_node(id, currentNode["pos"])
+                list_pos = currentNode['pos'].split(",")
+                x = float(list_pos[0])
+                y = float(list_pos[1])
+                pos = (x, y)
+                g_loaded.add_node(id, pos)  # add the node with his "pos"
             else:
-                self.g.add_node(id)
+                g_loaded.add_node(id)
         edges_From_Json = loaded_json["Edges"]
         for curretnEdge in edges_From_Json:
-            g.add_edge(curretnEdge["src"], curretnEdge["dest"], curretnEdge["w"])
+            g_loaded.add_edge(curretnEdge["src"], curretnEdge["dest"], curretnEdge["w"])
         file.close()
+        self.g = g_loaded
         return True
 
     def save_to_json(self, file_name: str = "save.json") -> bool:
@@ -219,3 +226,62 @@ class GraphAlgo(GraphAlgoInterface):
         except IOError as e:
             return False
             print(e)
+
+    def getPos(self, v: Node, limit):
+        if v.x() is None:
+            temp_x = random.randint(limit[0], limit[1])
+        else:
+            temp_x = v.x()
+        if v.y() is None:
+            temp_y = random.randint(limit[2], limit[3])
+        else:
+            temp_y = v.y()
+        return (temp_x, temp_y)
+
+    def getLimits(self):
+        nodes = self.g.get_all_v()
+        x = []
+        y = []
+
+        for k, v in nodes.items():  # check limits of random unknow pos nodes
+            if v.x() is not None:
+                x.append(v.getPos()[0])
+                y.append(v.getPos()[1])
+        if (len(x) == 0):
+            x_max = 10
+            x_min = 0
+        else:
+            x_max = max(x)
+            x_min = min(x)
+        if (len(y) == 0):
+            y_max = 10
+            y_min = 0
+        else:
+            y_max = max(y)
+            y_min = min(y)
+        return (x_min - 1, x_max + 1, y_min - 1, y_max + 1)
+
+    def plot_graph(self) -> None:
+        nodes = self.g.get_all_v()
+        limit = self.getLimits()
+        nodes_pos = dict()
+
+        for k, v in nodes.items():
+            c_pos = self.getPos(v, limit)
+            nodes_pos[k] = c_pos
+            #plt.plot(c_pos[0], c_pos[1], 'o', color='blue', ms=5)
+            plt.text(c_pos[0], c_pos[1], k, color='green')
+            plt.plot(c_pos[0], c_pos[1], 'o',color='red')
+
+        z=(limit[3]-limit[2])/400000
+        for id_s in nodes.keys():
+            edges_to = self.g.all_out_edges_of_node(id_s)
+            for id_d in edges_to.keys():
+                x1 = nodes_pos[id_s][0]  # x of src
+                y1 = nodes_pos[id_s][1]  # y of src
+                x2 = nodes_pos[id_d][0]
+                y2 = nodes_pos[id_d][1]
+                
+
+                plt.arrow(x1, y1, x2 - x1, y2 - y1, head_width=z*30, width=z,color="black",length_includes_head=True)
+        plt.show()
