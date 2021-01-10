@@ -26,10 +26,9 @@ if __name__ == '__main__':
     g.add_edge(1, 2, 1)
     g.add_edge(2, 0, 1)
     g.add_node(10)
-
     k=GraphAlgo(g)
     #k.plot_graph()
-    k.load_from_json("A5")
+    k.load_from_json("A3")
 
     k.plot_graph()
 

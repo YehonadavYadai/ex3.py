@@ -259,7 +259,8 @@ class GraphAlgo(GraphAlgoInterface):
         else:
             y_max = max(y)
             y_min = min(y)
-        return (x_min - 1, x_max + 1, y_min - 1, y_max + 1)
+        return (x_min , x_max , y_min , y_max )
+
 
     def plot_graph(self) -> None:
         nodes = self.g.get_all_v()
@@ -273,7 +274,11 @@ class GraphAlgo(GraphAlgoInterface):
             plt.text(c_pos[0], c_pos[1], k, color='green')
             plt.plot(c_pos[0], c_pos[1], 'o',color='red')
 
-        z=(limit[3]-limit[2])/400000
+        l_min = [limit[0], limit[2]]#let down
+        l_max = [limit[1], limit[3]]#right up
+        print(l_max,l_min)
+        l=math.dist(l_min,l_max)
+
         for id_s in nodes.keys():
             edges_to = self.g.all_out_edges_of_node(id_s)
             for id_d in edges_to.keys():
@@ -281,7 +286,11 @@ class GraphAlgo(GraphAlgoInterface):
                 y1 = nodes_pos[id_s][1]  # y of src
                 x2 = nodes_pos[id_d][0]
                 y2 = nodes_pos[id_d][1]
-                
 
-                plt.arrow(x1, y1, x2 - x1, y2 - y1, head_width=z*30, width=z,color="black",length_includes_head=True)
+                p = [x2, y2]
+                q = [x1, y1]
+                dis=math.dist(q,p)
+                a=dis/l
+                print(l,dis,dis/l)
+                plt.arrow(x1, y1, x2 - x1, y2 - y1, head_width=a/700, width=a/10000,color="black",length_includes_head=True)
         plt.show()
