@@ -10,13 +10,18 @@ from GraphAttributes import *
 from DiGraph import DiGraph
 from GraphInterface import GraphInterface
 import json
+import numpy as np
+import matplotlib.pyplot as plt
+import random
+
 from GraphAttributes import Node
 from types import SimpleNamespace
 
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self, g: DiGraph):
+    def __init__(self, g= DiGraph()):
+
         self.g = g
 
     def set_g(self, g: DiGraph):

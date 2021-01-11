@@ -5,7 +5,8 @@ from GraphAlgo import GraphAlgo
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-
+import networkx as nx
+import json
 class MyTestCase(unittest.TestCase):
 
     def test_connected_component_b(self):
@@ -164,8 +165,34 @@ class MyTestCase(unittest.TestCase):
         g.add_node(10)
 
         k = GraphAlgo(g)
-        k.load_from_json("G_1000_8000_1.json")
+
         k.plot_graph()
+
+
+    def testnetG(self):
+
+        g=nx.DiGraph()
+        file = open("A1")
+
+        pos = []
+        loaded_json = json.load(file)
+        node_from_json = loaded_json["Nodes"]
+        for currentNode in node_from_json:
+            id = currentNode["id"]
+            g.add_node(id)
+        edges_From_Json = loaded_json["Edges"]
+        for curretnEdge in edges_From_Json:
+
+            x=curretnEdge["src"]
+            y=curretnEdge["dest"]
+            g.add_edge(curretnEdge["src"], curretnEdge["dest"])
+
+
+        file.close()
+        nx.draw(g, with_labels=1)
+        plt.show()
+
+
 
 if __name__ == '__main__':
     unittest.main()
