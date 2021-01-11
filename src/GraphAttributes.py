@@ -39,7 +39,21 @@ class Node:
 
     def setPosition (self,x:int=0,y:int=0):
         self.pos=(x,y)
+    def getPos(self):
 
+        return self.pos
+
+    def x(self):
+        if(self.pos):
+            return self.pos[0]
+        else:
+            return None
+
+    def y(self):
+        if (self.pos):
+            return self.pos[1]
+        else:
+            return None
 
 class Edge:
     def __init__(self, src: int, dest: int, weight: float):

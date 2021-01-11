@@ -1,8 +1,11 @@
 import unittest
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
-
-
+import numpy as np
+import matplotlib.pyplot as plt
+import random
+import networkx as nx
+import json
 class MyTestCase(unittest.TestCase):
 
     def test_connected_component_b(self):
@@ -139,6 +142,55 @@ class MyTestCase(unittest.TestCase):
         t.save_to_json("t2.json")
         t.load_from_json("t1.json")
         t.save_to_json("test.json")
+
+
+    def test_plot(self):
+        g = DiGraph()
+        for i in range(10):
+            g.add_node(i)
+        g.add_edge(3, 4, 1)
+        g.add_edge(3, 7, 1)
+        g.add_edge(7, 3, 1)
+        g.add_edge(7, 5, 1)
+        g.add_edge(5, 0, 1)
+        g.add_edge(5, 6, 1)
+        g.add_edge(4, 5, 1)
+        g.add_edge(6, 4, 1)
+        g.add_edge(6, 0, 1)
+        g.add_edge(6, 2, 1)
+        g.add_edge(0, 1, 1)
+        g.add_edge(1, 2, 1)
+        g.add_edge(2, 0, 1)
+        g.add_node(10)
+
+        k = GraphAlgo(g)
+
+        k.plot_graph()
+
+
+    def testnetG(self):
+
+        g=nx.DiGraph()
+        file = open("A1")
+
+        pos = []
+        loaded_json = json.load(file)
+        node_from_json = loaded_json["Nodes"]
+        for currentNode in node_from_json:
+            id = currentNode["id"]
+            g.add_node(id)
+        edges_From_Json = loaded_json["Edges"]
+        for curretnEdge in edges_From_Json:
+
+            x=curretnEdge["src"]
+            y=curretnEdge["dest"]
+            g.add_edge(curretnEdge["src"], curretnEdge["dest"])
+
+
+        file.close()
+        nx.draw(g, with_labels=1)
+        plt.show()
+
 
 
 if __name__ == '__main__':

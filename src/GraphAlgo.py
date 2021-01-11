@@ -1,15 +1,25 @@
 import copy
 from abc import ABC
 from collections import deque
+from queue import LifoQueue
+import numpy as np
+import matplotlib.pyplot as plt
+import random
 from GraphAlgoInterface import GraphAlgoInterface
 from DiGraph import DiGraph
 from GraphInterface import GraphInterface
 import json
+import numpy as np
+import matplotlib.pyplot as plt
+import random
+from GraphAttributes import Node
+from types import SimpleNamespace
 
 
 class GraphAlgo(GraphAlgoInterface):
 
-    def __init__(self, g: DiGraph):
+    def __init__(self, g=DiGraph()):
+
         self.g = g
 
     def set_g(self, g: DiGraph):
@@ -171,20 +181,27 @@ class GraphAlgo(GraphAlgoInterface):
         """ Loads a graph from a json file.
         @param file_name: The path to the json file
         @returns True if the loading was successful, False o.w."""
-        g = DiGraph()
+        g_loaded = DiGraph()
         file = open(file_name)
+
+        pos = []
         loaded_json = json.load(file)
         node_from_json = loaded_json["Nodes"]
         for currentNode in node_from_json:
             id = currentNode["id"]
             if len(currentNode) > 1:
-                self.g.add_node(id, currentNode["pos"])
+                list_pos = currentNode['pos'].split(",")
+                x = float(list_pos[0])
+                y = float(list_pos[1])
+                pos = (x, y)
+                g_loaded.add_node(id, pos)  # add the node with his "pos"
             else:
-                self.g.add_node(id)
+                g_loaded.add_node(id)
         edges_From_Json = loaded_json["Edges"]
         for curretnEdge in edges_From_Json:
-            g.add_edge(curretnEdge["src"], curretnEdge["dest"], curretnEdge["w"])
+            g_loaded.add_edge(curretnEdge["src"], curretnEdge["dest"], curretnEdge["w"])
         file.close()
+        self.g = g_loaded
         return True
 
     def save_to_json(self, file_name: str = "save.json") -> bool:
@@ -213,3 +230,93 @@ class GraphAlgo(GraphAlgoInterface):
         except IOError as e:
             return False
             print(e)
+
+    """
+    Saves the graph in JSON format to a file
+    @param Node: current node we want to check his pos in the plot
+    @param limit: tuple of limits of the plot
+    @return: it the node have pos return his pos , if he does not have ,return random pos in the limit
+                         """
+
+    def getPos(self, v: Node, limit):
+        if v.x() is None:
+            temp_x = random.randint(limit[0], limit[1])
+        else:
+            temp_x = v.x()
+        if v.y() is None:
+            temp_y = random.randint(limit[2], limit[3])
+        else:
+            temp_y = v.y()
+        return (temp_x, temp_y)
+
+    """
+    gives the limit of the plot from the pos of the nodes of the graph
+    
+    @return: tuple of the limits of the graph(max and min value of x and y from all the nodes)
+            if all nodes dont have pos as diff we set 0 to 10 min and max value of x,y.
+                         """
+
+    def getLimits(self):
+        nodes = self.g.get_all_v()
+        x = []
+        y = []
+
+        for k, v in nodes.items():  # check limits of random unknow pos nodes
+            if v.x() is not None:
+                x.append(v.getPos()[0])
+                y.append(v.getPos()[1])
+        if (len(x) == 0):
+            x_max = 10
+            x_min = 0
+        else:
+            x_max = max(x)
+            x_min = min(x)
+        if (len(y) == 0):
+            y_max = 10
+            y_min = 0
+        else:
+            y_max = max(y)
+            y_min = min(y)
+        return (x_min, x_max, y_min, y_max)
+
+    """
+    Plots the graph.
+    If the nodes have a position, the nodes will be placed there.
+    Otherwise, they will be placed in a random but elegant manner.
+    @return: None
+            """
+
+    def plot_graph(self) -> None:
+        nodes = self.g.get_all_v()
+        # tuple that hold the limit of the graph
+        limit = self.getLimits()
+        # dict that hold {id:(x,y)}
+        nodes_pos = dict()
+        # add the nodes to the plot
+        for k, v in nodes.items():
+            c_pos = self.getPos(v, limit)
+            nodes_pos[k] = c_pos
+            plt.text(c_pos[0], c_pos[1], k, color='green')
+            plt.plot(c_pos[0], c_pos[1], 'o', color='red')
+
+        # dest of salnt of the limit fo the graph
+        l_min = [limit[0], limit[2]]  # let down
+        l_max = [limit[1], limit[3]]  # right up
+        l = np.math.dist(l_min, l_max)
+
+        # add arrow for each edge of the graph
+        for id_s in nodes.keys():
+            edges_to = self.g.all_out_edges_of_node(id_s)
+            for id_d in edges_to.keys():
+                x1 = nodes_pos[id_s][0]  # x of src
+                y1 = nodes_pos[id_s][1]  # y of src
+                x2 = nodes_pos[id_d][0]
+                y2 = nodes_pos[id_d][1]
+                # doing some math for the size of the edge and the heaf of the edge
+                p = [x2, y2]
+                q = [x1, y1]
+                dis = np.math.dist(q, p)
+                a = dis / l
+                plt.arrow(x1, y1, x2 - x1, y2 - y1, head_width=dis / 30, width=a / 10000, color="black",
+                          length_includes_head=True)
+        plt.show()
