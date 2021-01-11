@@ -87,3 +87,5 @@ def check2():
 
 if __name__ == '__main__':
     check0()
+    check1()
+    check2()

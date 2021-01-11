@@ -1,15 +1,10 @@
 import copy
-import math
+from abc import ABC
 from collections import deque
-from queue import LifoQueue
-
 from GraphAlgoInterface import GraphAlgoInterface
-from GraphAttributes import *
 from DiGraph import DiGraph
 from GraphInterface import GraphInterface
 import json
-from GraphAttributes import Node
-from types import SimpleNamespace
 
 
 class GraphAlgo(GraphAlgoInterface):
@@ -109,7 +104,6 @@ class GraphAlgo(GraphAlgoInterface):
                 ans.remove_edge(node_id, dest)
             for src in nodes_to_current:
                 ans.remove_edge(src, node_id)
-
         for node_id in g.get_all_v():
             node = g.get_all_v()[node_id]
             for neighbor_id in node.edges_from:
@@ -136,25 +130,25 @@ class GraphAlgo(GraphAlgoInterface):
         return ans
 
     def connected_components(self):
+        my_list = list()
         ans = list()
         g = self.get_graph()
         # if id1 not in the graph
         for node_id in g.get_all_v():
-            node = g.get_all_v()[node_id]
-            if node.info != '':
-                component = self.dfs(node_id, g)
-                g_t = self.transpose()
-                component_t = self.dfs(node_id, g_t)
-                s = set(component).intersection(component_t)
-                ans.append(s)
+            component = self.dfs(node_id, g)
+            g_t = self.transpose()
+            component_t = self.dfs(node_id, g_t)
+            s = set(component).intersection(component_t)
+            my_list.append(s)
         for node_id in g.get_all_v():
             node = g.get_all_v()[node_id]
             node.info = ''
+        for i in my_list:
+            if i not in ans:
+                ans.append(i)
         return ans
 
-
-
-    def dfs(self, id1: int, g: DiGraph):
+    def dfs(self, id1: int, g: DiGraph) -> list:
         ans = list()
         ans.append(id1)
         for node_id in g.get_all_v():

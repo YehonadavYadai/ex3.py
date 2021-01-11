@@ -1,4 +1,3 @@
-import math
 import unittest
 from DiGraph import DiGraph
 from GraphAlgo import GraphAlgo
@@ -24,8 +23,8 @@ class MyTestCase(unittest.TestCase):
         g.add_edge(0, 1, 1)
         g.add_edge(1, 2, 1)
         g.add_edge(2, 0, 1)
-        print(k.connected_components())
-
+        all_components = [{0, 1, 2}, {3, 7}, {4, 5, 6}, {8}, {9}]  # all the components in the graph
+        self.assertEqual(all_components, k.connected_components())
 
     def test_connected_component_a(self):
         g = DiGraph()
@@ -82,21 +81,21 @@ class MyTestCase(unittest.TestCase):
         self.assertFalse(g_t.add_edge(4, 7, 1))
         self.assertEqual(g_t.v_size(), g.v_size())
 
-
     def test_dfs(self):
         g = DiGraph()
         k = GraphAlgo(g)
-        for i in range(11):
+        for i in range(100):
             g.add_node(i)
-        g.add_edge(4,1,2)
-        g.add_edge(1,10,2)
-        g.add_edge(10,1,2)
-        g.add_edge(9,6,6)
-        print(k.dfs(1
-                    ,g))
-        g_t = k.transpose()
-        k.set_g(g_t)
-        print(k.dfs(1,g_t))
+        g.add_edge(4, 1, 2)
+        g.add_edge(1, 10, 2)
+        g.add_edge(10, 1, 2)
+        g.add_edge(9, 6, 6)
+        self.assertEqual([1, 10], k.dfs(1, g))
+        self.assertEqual([4, 1, 10], k.dfs(4, g))
+        self.assertEqual([9, 6], k.dfs(9, g))
+        self.assertEqual([6], k.dfs(6, g))
+        self.assertEqual([20], k.dfs(20, g))
+
 
     def test_shortest_path(self):
         g = DiGraph()
@@ -125,7 +124,7 @@ class MyTestCase(unittest.TestCase):
         g.add_node(9)
         self.assertEqual((float('inf'), ()), k.shortest_path(0, 9))
 
-    def test_save_to_json(self):
+    def test_load_from_json(self):
         g = DiGraph()
         g.add_node(1)
         g.add_node(2)
