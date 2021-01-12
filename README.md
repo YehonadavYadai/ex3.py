@@ -40,3 +40,10 @@ main methods:
 7. plot_graph-Plot The Graph
 
 
+# Comparisons:
+
+in ths part we will compare the algorithms between EX2 that we built in java and beyween NetWorkX LIbary , libary that build and have algo for Graphs.
+
+
+
+
