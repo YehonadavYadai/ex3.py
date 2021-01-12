@@ -1,6 +1,5 @@
 class Node:
 
-
     def __init__(self, node_id: int = 0, pos: tuple = None):
         self.node_id = node_id
         """"" This node ID """

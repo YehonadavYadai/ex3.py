@@ -171,7 +171,7 @@ class MyTestCase(unittest.TestCase):
     def testnetG(self):
 
         g=nx.DiGraph()
-        file = open("A1")
+        file = open("C:/Users/Stycks/PycharmProjects/Ex3 -- PY/resources/G_10_80_1.json")
 
         pos = []
         loaded_json = json.load(file)

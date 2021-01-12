@@ -183,8 +183,6 @@ class GraphAlgo(GraphAlgoInterface):
         @returns True if the loading was successful, False o.w."""
         g_loaded = DiGraph()
         file = open(file_name)
-
-        pos = []
         loaded_json = json.load(file)
         node_from_json = loaded_json["Nodes"]
         for currentNode in node_from_json:
@@ -211,10 +209,10 @@ class GraphAlgo(GraphAlgoInterface):
               @return: True if the save was successful, False o.w.
                      """
 
-        json_to_save = {}
+
         arrNodes = []
         arrEdges = []
-        i = 0
+
         nodes = self.g.get_all_v()  # dict with {key:Node}
         try:
             with open(file_name, "w")as write_file:
@@ -228,8 +226,9 @@ class GraphAlgo(GraphAlgoInterface):
                 return True
 
         except IOError as e:
-            return False
             print(e)
+            return False
+
 
     """
     Saves the graph in JSON format to a file
@@ -247,7 +246,7 @@ class GraphAlgo(GraphAlgoInterface):
             temp_y = random.randint(limit[2], limit[3])
         else:
             temp_y = v.y()
-        return (temp_x, temp_y)
+        return temp_x, temp_y
 
     """
     gives the limit of the plot from the pos of the nodes of the graph
@@ -265,19 +264,19 @@ class GraphAlgo(GraphAlgoInterface):
             if v.x() is not None:
                 x.append(v.getPos()[0])
                 y.append(v.getPos()[1])
-        if (len(x) == 0):
+        if len(x) == 0:
             x_max = 10
             x_min = 0
         else:
             x_max = max(x)
             x_min = min(x)
-        if (len(y) == 0):
+        if len(y) == 0:
             y_max = 10
             y_min = 0
         else:
             y_max = max(y)
             y_min = min(y)
-        return (x_min, x_max, y_min, y_max)
+        return x_min, x_max, y_min, y_max
 
     """
     Plots the graph.
@@ -302,7 +301,7 @@ class GraphAlgo(GraphAlgoInterface):
         # dest of salnt of the limit fo the graph
         l_min = [limit[0], limit[2]]  # let down
         l_max = [limit[1], limit[3]]  # right up
-        l = np.math.dist(l_min, l_max)
+        dif = np.math.dist(l_min, l_max)
 
         # add arrow for each edge of the graph
         for id_s in nodes.keys():
@@ -316,7 +315,7 @@ class GraphAlgo(GraphAlgoInterface):
                 p = [x2, y2]
                 q = [x1, y1]
                 dis = np.math.dist(q, p)
-                a = dis / l
+                a = dis / dif
                 plt.arrow(x1, y1, x2 - x1, y2 - y1, head_width=dis / 30, width=a / 10000, color="black",
                           length_includes_head=True)
         plt.show()
