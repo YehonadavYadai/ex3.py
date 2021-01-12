@@ -2,8 +2,8 @@
 Authors: Raphel Suliman and Yehonadav Yadai
 this project is to implement directed weighted data structure and graph algorithms using Python Programming language, in this project we have three parts:
 
-#DiGraph class:
-## main methods:
+##DiGraph class:
+### main methods:
 add_edge- add edge to the Graph with the wighte of the edge, return True if the edge was added to the Graph, False if not.
 
 add_node- add node to the Graph, return True if the node was added to the Graph, false if not .
@@ -23,5 +23,5 @@ e_size- Returns the number of edges in this graph O(1)
 
 get_mc() - return graph mode count
 
-#GraphAlgo class:
-## main methods:
+##GraphAlgo class:
+### main methods:
