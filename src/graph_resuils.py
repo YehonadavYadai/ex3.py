@@ -69,7 +69,7 @@ if __name__ == '__main__':
         start =time_ms()
         strong = nx.strongly_connected_components(graph)
         end =time_ms()
-        print("shortestPath - time :"+str(end - start) + "ms")
+        print("shortestPath - time:"+str(end - start) + " ms")
 
 
         #NetWork - componets
@@ -79,14 +79,14 @@ if __name__ == '__main__':
             if 0 in i:
                 break
         end =time_ms()
-        print("componet - time :"+str(end - start) + "ms")
+        print("componet - time:"+str(end - start) + " ms")
 
 
         #Network - componet
         start = time_ms()
         nx.strongly_connected_components(graph)
         end = time_ms()
-        print("componet - time :"+str(end - start) + "ms")
+        print("componet - time:"+str(end - start) + " ms")
 
 
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
         start =time_ms()
         ga.shortest_path(src,dest)
         end = time_ms()
-        print("shortestPath - time :"+str(end - start)+"ms")
+        print("shortestPath - time:"+str(end - start)+" ms")
 
 
         #GraphAlgo - componets
@@ -103,7 +103,7 @@ if __name__ == '__main__':
         l=ga.connected_components()
         end =time_ms()
         # print(nx.edges(graph))
-        print("componets - time :"+str(end - start) + "ms")
+        print("componets - time:"+str(end - start) + " ms")
 
 
         #GraphAlgo - compnet
@@ -111,7 +111,7 @@ if __name__ == '__main__':
         l=ga.connected_component(0)
         end = time_ms()
         # print(nx.edges(graph))
-        print("componet - time :"+str(end - start) + "ms")
+        print("componet - time:"+str(end - start) + " ms")
 
         print("")
         print("")
