@@ -1,5 +1,5 @@
 # Object-Oriented Programming Course Assignment #3
-Authors: Raphel Suliman and Yehonadav Yadai
+Authors: Raphael Suliman and Yehonadav Yadai
 this project is to implement directed weighted data structure and graph algorithms using Python Programming language, in this project we have three parts:
 
 # DiGraph class:
