@@ -6,21 +6,21 @@ this project is to implement directed weighted data structure and graph algorith
 main methods:
 1. add_edge_from- add edge that come to self  by added the src node id to dict by pair (id,weight)
 
-2.add_edges_towards-add edge that come from self by added the dest node id to dict by pair (id,weight)
+2. add_edges_towards-add edge that come from self by added the dest node id to dict by pair (id,weight)
 
-3.get_id - return the id of the node.
+3. get_id - return the id of the node.
 
-4.set_tag - set tag to seld_node
+4. set_tag - set tag to seld_node
        
-5.get_tag- return the tag of the node.
+5. get_tag- return the tag of the node.
      
-6.repr- represent the way "node" will be print.
+6. repr- represent the way "node" will be print.
        
 7. setPosition - set a pos to self_node.
        
 8. getPos(self)- return the pos of self_node.
 
-9.  x - return x value of pos of self_node
+9. x - return x value of pos of self_node
 
 10. def y-return x value of pos of self_node.
         
