@@ -63,7 +63,9 @@ main methods:
 
 6. connected_components- Finds all the Strongly Connected Component(SCC) in the graph. 
 
-7. plot_graph-Plot The Graph
+7. plot_graph-Plot The Graph 
+![הורדה (1)](https://user-images.githubusercontent.com/73061908/104634164-f16ed880-56a8-11eb-9d81-55e96a3abd70.png)
+
 
 
 # Comparisons:
