@@ -205,7 +205,8 @@ class GraphAlgo(GraphAlgoInterface):
                 neighbor = g.get_all_v()[neighbor_id]
                 if neighbor.info != 'V':
                     stack.append(neighbor_id)
-                    ans.append(neighbor_id)
+                    if neighbor_id not in ans: 
+                        ans.append(neighbor_id)
         return ans
 
     def load_from_json(self, file_name: str) -> bool:
