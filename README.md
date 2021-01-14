@@ -48,6 +48,7 @@ main methods:
 
 9. get_mc() - return graph mode count
 
+![הורדה](https://user-images.githubusercontent.com/73061908/104633975-a359d500-56a8-11eb-9314-680ca8ac3848.png)
 # GraphAlgo class:
  main methods:
 1. get_graph- return the init graph
