@@ -1,4 +1,4 @@
-from GraphInterface import GraphInterface
+from src.GraphInterface import GraphInterface
 from GraphAttributes import *
 
 

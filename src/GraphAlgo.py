@@ -81,7 +81,7 @@ class GraphAlgo(GraphAlgoInterface):
         path = list()
         # if there's no path
         if distance[at] == float('inf'):
-            path = ()
+            path = []
             return distance[at], path
         i = 0
         while at != src_node.get_tag:
@@ -126,8 +126,14 @@ class GraphAlgo(GraphAlgoInterface):
         # if id1 not in the graph
         if id1 not in g.get_all_v():
             raise Exception
+        for node_id in g.get_all_v():
+            node = g.get_all_v()[node_id]
+            node.info = 'X'
         component = self.dfs(id1, g)
         g_t = self.transpose()
+        for node_id in g_t.get_all_v():
+            node = g_t.get_all_v()[node_id]
+            node.info = 'X'
         component_t = self.dfs(id1, g_t)
         s = set(component).intersection(component_t)
         ans = list()
@@ -143,13 +149,36 @@ class GraphAlgo(GraphAlgoInterface):
         my_list = list()
         ans = list()
         g = self.get_graph()
-        # if id1 not in the graph
+        # tagging all the nodes in g
         for node_id in g.get_all_v():
-            component = self.dfs(node_id, g)
-            g_t = self.transpose()
-            component_t = self.dfs(node_id, g_t)
-            s = set(component).intersection(component_t)
-            my_list.append(s)
+            node = g.get_all_v()[node_id]
+            node.info = 'X'
+        g_t = self.transpose()
+        # tagging all the nodes in g_t
+        for node_id in g_t.get_all_v():
+            node = g_t.get_all_v()[node_id]
+            node.info = 'X'
+        for node_id in g.get_all_v():
+            current_node = g.get_all_v()[node_id]
+            # if node isn't already part of SCC - run connected_component on it
+            if current_node.info == 'X':
+                component = self.dfs(node_id, g)
+                component_t = self.dfs(node_id, g_t)
+                s = list()
+                # if node id is in both of the lists
+                for value in component:
+                    if value in component_t:
+                        s.append(value)
+                    # tagging the value again so connected_component will run on it
+                    else:
+                        current_v = g.get_all_v()[value]
+                        current_v.info = 'X'
+                for value in component_t:
+                    if value not in component:
+                        current_v_t = g_t.get_all_v()[value]
+                        current_v_t.info = 'X'
+                s.sort()
+                my_list.append(s)
         for node_id in g.get_all_v():
             node = g.get_all_v()[node_id]
             node.info = ''
@@ -159,11 +188,13 @@ class GraphAlgo(GraphAlgoInterface):
         return ans
 
     def dfs(self, id1: int, g: DiGraph) -> list:
+        """" This algorithm is used to find all the nodes that are available to reach from id1 node.
+        Note: this algorithm will not work by itself for it adapted for SCC"""
         ans = list()
         ans.append(id1)
-        for node_id in g.get_all_v():
-            node = g.get_all_v()[node_id]
-            node.info = 'X'
+        # for node_id in g.get_all_v():
+        #     node = g.get_all_v()[node_id]
+        #     node.info = 'X'
         stack = deque()
         stack.append(id1)
         while stack:
@@ -209,7 +240,6 @@ class GraphAlgo(GraphAlgoInterface):
               @return: True if the save was successful, False o.w.
                      """
 
-
         arrNodes = []
         arrEdges = []
 
@@ -228,7 +258,6 @@ class GraphAlgo(GraphAlgoInterface):
         except IOError as e:
             print(e)
             return False
-
 
     """
     Saves the graph in JSON format to a file
@@ -250,7 +279,7 @@ class GraphAlgo(GraphAlgoInterface):
 
     """
     gives the limit of the plot from the pos of the nodes of the graph
-    
+
     @return: tuple of the limits of the graph(max and min value of x and y from all the nodes)
             if all nodes dont have pos as diff we set 0 to 10 min and max value of x,y.
                          """

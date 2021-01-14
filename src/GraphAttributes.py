@@ -15,6 +15,7 @@ class Node:
         """" Used for complex algorithms on graph"""
         self.info = None
         """" Used for complex algorithms on graph"""
+
     def add_edge_from(self, node_id: int, weight: float):
         if node_id not in self.edges_from:
             self.edges_from[node_id] = weight
@@ -33,29 +34,24 @@ class Node:
         return self._tag
 
     def __repr__(self):
-        x=(f"{self.node_id}: |edges out| {len(self.edges_towards)} , |edges in| {len(self.edges_from)} ")
+        x = f"{self.node_id}: |edges out| {len(self.edges_towards)} , |edges in| {len(self.edges_from)} "
         return x
 
-    def setPosition (self,x:int=0,y:int=0):
-        self.pos=(x,y)
+    def setPosition(self, x: int = 0, y: int = 0):
+        self.pos = (x, y)
+
     def getPos(self):
 
         return self.pos
 
     def x(self):
-        if(self.pos):
+        if self.pos:
             return self.pos[0]
         else:
             return None
 
     def y(self):
-        if (self.pos):
+        if self.pos:
             return self.pos[1]
         else:
             return None
-
-class Edge:
-    def __init__(self, src: int, dest: int, weight: float):
-        self.src = src
-        self.dest = dest
-        self.weight = weight

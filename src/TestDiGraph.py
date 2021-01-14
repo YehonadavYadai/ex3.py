@@ -1,5 +1,5 @@
 import unittest
-from DiGraph import DiGraph
+from src.DiGraph import *
 
 
 class MyTestCase(unittest.TestCase):
@@ -54,6 +54,7 @@ class MyTestCase(unittest.TestCase):
                 break
         self.assertEqual(True, flag)
 
+
     def test_v_size(self):
         counter = 0
         g = DiGraph()
@@ -65,19 +66,21 @@ class MyTestCase(unittest.TestCase):
             counter -= 1
         self.assertEqual(counter, g.v_size())
 
+
     def test_e_size(self):
         counter = 0
         g = DiGraph()
         for i in range(10000):
             g.add_node(i)
         for i in range(500):
-            g.add_edge(i, (i + 1) * 10, i * 10 / 5)
-            counter += 1
+           g.add_edge(i, (i + 1) * 10, i * 10 / 5)
+           counter += 1
         self.assertEqual(counter, g.e_size())
         for i in range(100):
             g.remove_edge(i, (i + 1) * 10)
             counter -= 1
         self.assertEqual(counter, g.e_size())
+
 
     def test_get_all_v(self):
         g = DiGraph()
@@ -87,6 +90,7 @@ class MyTestCase(unittest.TestCase):
             current_node = g.get_all_v()[i]
             my_dict[i] = current_node
         self.assertEqual(my_dict, g.get_all_v())
+
 
     def test_all_in_edges_of_node(self):
         g = DiGraph()
@@ -98,6 +102,7 @@ class MyTestCase(unittest.TestCase):
             my_dict[i + 2] = i * 5
         self.assertEqual(my_dict, g.all_in_edges_of_node(0))
 
+
     def test_all_out_edges_of_node(self):
         g = DiGraph()
         my_dict = dict()
@@ -107,6 +112,7 @@ class MyTestCase(unittest.TestCase):
             g.add_edge(0, i + 2, i * 5)
             my_dict[i + 2] = i * 5
         self.assertEqual(my_dict, g.all_out_edges_of_node(0))
+
 
     def test_get_mc(self):
         counter = 0
@@ -122,6 +128,5 @@ class MyTestCase(unittest.TestCase):
             counter += 1
         self.assertEqual(counter, g.get_mc())
 
-
 if __name__ == '__main__':
-    unittest.main()
+     unittest.main()

@@ -1,14 +1,16 @@
 import unittest
-from DiGraph import DiGraph
-from GraphAlgo import GraphAlgo
+from src.DiGraph import DiGraph
+from src.GraphAlgo import GraphAlgo
 import numpy as np
 import matplotlib.pyplot as plt
 import random
 import networkx as nx
 import json
+
+
 class MyTestCase(unittest.TestCase):
 
-    def test_connected_component_b(self):
+    def test_connected_components(self):
         g = DiGraph()
         k = GraphAlgo(g)
         for i in range(10):
@@ -26,7 +28,7 @@ class MyTestCase(unittest.TestCase):
         g.add_edge(0, 1, 1)
         g.add_edge(1, 2, 1)
         g.add_edge(2, 0, 1)
-        all_components = [{0, 1, 2}, {3, 7}, {4, 5, 6}, {8}, {9}]  # all the components in the graph
+        all_components = [[0, 1, 2], [3, 7], [4, 5, 6], [8], [9]]  # all the components in the graph
         self.assertEqual(all_components, k.connected_components())
 
     def test_connected_component_a(self):
@@ -84,28 +86,27 @@ class MyTestCase(unittest.TestCase):
         self.assertFalse(g_t.add_edge(4, 7, 1))
         self.assertEqual(g_t.v_size(), g.v_size())
 
-    def test_dfs(self):
-        g = DiGraph()
-        k = GraphAlgo(g)
-        for i in range(100):
-            g.add_node(i)
-        g.add_edge(4, 1, 2)
-        g.add_edge(1, 10, 2)
-        g.add_edge(10, 1, 2)
-        g.add_edge(9, 6, 6)
-        self.assertEqual([1, 10], k.dfs(1, g))
-        self.assertEqual([4, 1, 10], k.dfs(4, g))
-        self.assertEqual([9, 6], k.dfs(9, g))
-        self.assertEqual([6], k.dfs(6, g))
-        self.assertEqual([20], k.dfs(20, g))
-
+    # def test_dfs(self):
+    #     g = DiGraph()
+    #     k = GraphAlgo(g)
+    #     for i in range(100):
+    #         g.add_node(i)
+    #     g.add_edge(4, 1, 2)
+    #     g.add_edge(1, 10, 2)
+    #     g.add_edge(10, 1, 2)
+    #     g.add_edge(9, 6, 6)
+    #     self.assertEqual([1, 10], k.dfs(1, g))
+    #     self.assertEqual([4, 1, 10], k.dfs(4, g))
+    #     self.assertEqual([9, 6], k.dfs(9, g))
+    #     self.assertEqual([6], k.dfs(6, g))
+    #     self.assertEqual([20], k.dfs(20, g))
 
     def test_shortest_path(self):
         g = DiGraph()
         for i in range(10):
             g.add_node(i)
         k = GraphAlgo(g)
-        self.assertEqual((float('inf'), ()), k.shortest_path(0, 9))
+        self.assertEqual((float('inf'), []), k.shortest_path(0, 9))
         g.add_edge(0, 1, 2)
         g.add_edge(1, 2, 1)
         g.add_edge(1, 3, 6.2)
@@ -125,7 +126,7 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(dis, 13)
         g.remove_node(9)
         g.add_node(9)
-        self.assertEqual((float('inf'), ()), k.shortest_path(0, 9))
+        self.assertEqual((float('inf'), []), k.shortest_path(0, 9))
 
     def test_load_from_json(self):
         g = DiGraph()
@@ -142,6 +143,7 @@ class MyTestCase(unittest.TestCase):
         t.save_to_json("t2.json")
         t.load_from_json("t1.json")
         t.save_to_json("test.json")
+
 
 
     def test_plot(self):
@@ -167,13 +169,9 @@ class MyTestCase(unittest.TestCase):
 
         k.plot_graph()
 
-
     def testnetG(self):
-
-        g=nx.DiGraph()
+        g = nx.DiGraph()
         file = open("C:/Users/Stycks/PycharmProjects/Ex3 -- PY/resources/G_10_80_1.json")
-
-        pos = []
         loaded_json = json.load(file)
         node_from_json = loaded_json["Nodes"]
         for currentNode in node_from_json:
@@ -181,16 +179,13 @@ class MyTestCase(unittest.TestCase):
             g.add_node(id)
         edges_From_Json = loaded_json["Edges"]
         for curretnEdge in edges_From_Json:
-
-            x=curretnEdge["src"]
-            y=curretnEdge["dest"]
+            x = curretnEdge["src"]
+            y = curretnEdge["dest"]
             g.add_edge(curretnEdge["src"], curretnEdge["dest"])
-
 
         file.close()
         nx.draw(g, with_labels=1)
         plt.show()
-
 
 
 if __name__ == '__main__':
