@@ -63,8 +63,12 @@ main methods:
 
 6. connected_components- Finds all the Strongly Connected Component(SCC) in the graph. 
 
-7. plot_graph-Plot The Graph 
-![הורדה (1)](https://user-images.githubusercontent.com/73061908/104634164-f16ed880-56a8-11eb-9d81-55e96a3abd70.png)
+7. plot_graph-Plot The Graph
+
+
+![הורדה (1)](https://user-images.githubusercontent.com/73061908/104634164-f16ed880-56a8-11eb-9d81-55e96a3abd70.png)  ![הורדה (2)](https://user-images.githubusercontent.com/73061908/104634624-896cc200-56a9-11eb-9e3b-927f2bb6f9c4.png)
+
+
 
 
 
@@ -72,6 +76,8 @@ main methods:
 
 in ths part we will compare the algorithms between EX2 that we built in java and beyween NetWorkX LIbary , libary that build and have algo for Graphs.
 
+EX: Graph with 100 Nodes and 800 Edge compare with all algorytem between 3 diffrent platforms.
+![G_100_800](https://user-images.githubusercontent.com/73061908/104634328-2549fe00-56a9-11eb-84a0-086a09c1ef35.png)
 
 
 
