@@ -1,6 +1,8 @@
-# Object-Oriented Programming Course Assignment #3
+# Object-Oriented Assignment EX.3
 Authors: Raphael Suliman and Yehonadav Yadai
 this project is to implement directed weighted data structure and graph algorithms using Python Programming language, in this project we have three parts:
+our class represents a directed graph that have nodes and edges every node hold the the edges by hold the nodes that connect to him and from him and the weight of the edge, the edge means that this there is a path from source node to destination node . edges got weight that represent the "cost" of moving throw them, we think of this like a time to go from place to another , this graph can used by apllicaion  , games, like GPS , MOV games and stuuf like this. this is the base for all that aplllication.
+enjoy!.
 
 # GraphAttributes class:
 main methods:
@@ -66,6 +68,7 @@ main methods:
 # Comparisons:
 
 in ths part we will compare the algorithms between EX2 that we built in java and beyween NetWorkX LIbary , libary that build and have algo for Graphs.
+
 
 
 
